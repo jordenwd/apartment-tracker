@@ -58,8 +58,6 @@ public class ApartmentsComScraperService {
 
     Pattern pattern = Pattern.compile(regex);
 
-    public ApartmentsComScraperService(WebDriver mockDriver) {
-    }
 
 
     public Apartment scrapeListing(String url){
