@@ -1,33 +1,33 @@
 package org.jwd.apartmenttracker.entities;
 
-//import jakarta.persistence.*;
+import jakarta.persistence.*;
 
 import java.util.List;
 import java.util.Objects;
 
 
-//@Entity
-//@Table(name="apartments")
+@Entity
+@Table(name="apartments")
 public class Apartment {
 
-//    @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
+   @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long id;
 
-//    @Column(nullable=false)
+   @Column(nullable=false)
     private String name;
-//    @Column(nullable=false)
+   @Column(nullable=false)
     private String streetAddress;
-//    @Column(nullable=false)
+   @Column(nullable=false)
     private String city;
 
 
 
-    //    @Column
+       @Column
     private String state;
-//    @Column(nullable=false)
+   @Column(nullable=false)
     private int zipCode;
 
-//    @OneToMany(mappedBy = "apartment")
+   @OneToMany(mappedBy = "apartment")
     private List<Floorplan> floorplans;
 
     public Apartment() {
