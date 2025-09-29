@@ -44,30 +44,30 @@ public class ApartmentsComScraperService {
 
     private String url;
 
-    //data for apartment
-    private String propertyName;
-    private String streetAddress;
-    private String city;
-    private String state;
-    private String zipCode;
-    private List<Floorplan> floorplans;
-    private String contactPhone;
-
-    //regex
-    private String regex = "^(.*?),\\s*(.*?),\\s*([A-Z]{2})\\s*(\\d{5})$";
+    //regex for splitting address
+    private final String regex = "^(.*?),\\s*(.*?),\\s*([A-Z]{2})\\s*(\\d{5})$";
 
     Pattern pattern = Pattern.compile(regex);
 
 
-
+    /**
+     * Scrapes the apartment listing from the given URL and returns an Apartment object
+     * @param url
+     * @return An Apartment object containing the scraped data
+     */
     public Apartment scrapeListing(String url){
         driver.get(url);
-        propertyName = driver.findElement(By.id("propertyName")).getText();
+        //data for apartment
+        String propertyName = driver.findElement(By.id("propertyName")).getText();
 
         String address = driver.findElement(By.className("propertyAddressContainer")).getText();
 
         Matcher matcher = pattern.matcher(address);
 
+        String streetAddress;
+        String city;
+        String state;
+        String zipCode;
         if(matcher.matches()){
             streetAddress = matcher.group(1);
             city = matcher.group(2);
@@ -78,7 +78,7 @@ public class ApartmentsComScraperService {
         }
 
         List<WebElement> plans = driver.findElements(By.className("pricingGridItem"));
-        floorplans = new ArrayList<>();
+        List<Floorplan> floorplans = new ArrayList<>();
 
         for(WebElement plan : plans){
             Floorplan fp = new Floorplan();
@@ -94,8 +94,14 @@ public class ApartmentsComScraperService {
             floorplans.add(fp);
         }
 
-        contactPhone = driver.findElement(By.className("propertyPhone")).getText();
+
+        String contactPhone = driver.findElement(By.className("propertyPhone")).getText();
         return new Apartment(propertyName, streetAddress, city, state, Integer.parseInt(zipCode), floorplans);
+    }
+
+    // Setter for WebDriver to allow injection of mock or alternative drivers for testing
+    public void setDriver(WebDriver newDriver) {
+        this.driver = newDriver;
     }
 
 }
