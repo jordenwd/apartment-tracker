@@ -1,12 +1,12 @@
 package org.jwd.apartmenttracker.entities;
 
-//import jakarta.persistence.Entity;
-//import jakarta.persistence.Id;
-//import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
-//@Entity
+@Entity
 public class Floorplan {
-//    @Id
+   @Id
     private Long id;
 
 
@@ -18,7 +18,7 @@ public class Floorplan {
     private String priceRange;
 
 
-//    @ManyToOne
+   @ManyToOne
     private Apartment apartment;
 
     //getters and setters
