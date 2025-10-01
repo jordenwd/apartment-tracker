@@ -10,21 +10,24 @@ import java.util.Objects;
 @Table(name="apartments")
 public class Apartment {
 
-    @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
+   @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable=false)
+   @Column(nullable=false)
     private String name;
-    @Column(nullable=false)
+   @Column(nullable=false)
     private String streetAddress;
-    @Column(nullable=false)
+   @Column(nullable=false)
     private String city;
-    @Column
+
+
+
+       @Column
     private String state;
-    @Column(nullable=false)
+   @Column(nullable=false)
     private int zipCode;
 
-    @OneToMany(mappedBy = "apartment")
+   @OneToMany(mappedBy = "apartment")
     private List<Floorplan> floorplans;
 
     public Apartment() {
@@ -64,6 +67,14 @@ public class Apartment {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 
     public int getZipCode() {

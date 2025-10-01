@@ -6,7 +6,7 @@ import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Floorplan {
-    @Id
+   @Id
     private Long id;
 
 
@@ -18,7 +18,7 @@ public class Floorplan {
     private String priceRange;
 
 
-    @ManyToOne
+   @ManyToOne
     private Apartment apartment;
 
     //getters and setters
