@@ -35,16 +35,14 @@
                         <th>Bedrooms</th>
                         <th>Bathrooms</th>
                         <th>Square Feet</th>
-                        <th>Date Available</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="floorplan : ${apartment.floorplans}">
-                        <td th:text="${floorplan.price}"></td>
-                        <td th:text="${floorplan.bedrooms}"></td>
-                        <td th:text="${floorplan.bathrooms}"></td>
+                        <td th:text="${floorplan.priceRange}"></td>
+                        <td th:text="${floorplan.bed}"></td>
+                        <td th:text="${floorplan.bath}"></td>
                         <td th:text="${floorplan.squareFeet}"></td>
-                        <td th:text="${floorplan.dateAvailable}"></td>
                     </tr>
                     </tbody>
                 </table>

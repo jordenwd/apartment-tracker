@@ -24,20 +24,23 @@ public class Apartment {
    @Column(nullable=false)
     private int zipCode;
 
-   @OneToMany(mappedBy = "apartment")
+   @Column(nullable=false, unique=true)
+    private String url;
+
+   @OneToMany(mappedBy = "apartment", cascade = CascadeType.ALL)
     private List<Floorplan> floorplans;
 
     public Apartment() {
 
     }
 
-    public Apartment(String name, String streetAddress, String city, String state, int zipCode, List<Floorplan> floorplans) {
+    public Apartment(String name, String streetAddress, String city, String state, int zipCode, String url) {
         this.name = name;
         this.streetAddress = streetAddress;
         this.city = city;
         this.zipCode = zipCode;
-        this.floorplans = floorplans;
         this.state = state;
+        this.url = url;
     }
 
 
@@ -88,6 +91,14 @@ public class Apartment {
 
     public void setFloorplans(List<Floorplan> floorplans) {
         this.floorplans = floorplans;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     @Override
