@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Apartment Tracker</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
+    <script src="/webjars/htmx.org/1.9.10/dist/htmx.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <h1>Apartment Tracker</h1>
+    <form hx-post="/track" hx-target="#apartment-list" hx-swap="innerHTML">
+        <div class="mb-3">
+            <label for="url" class="form-label">URL</label>
+            <input type="url" class="form-control" id="url" name="url" placeholder="Enter URL">
+        </div>
+        <button type="submit" class="btn btn-primary">Track</button>
+    </form>
+
+    <h2 class="mt-5">Apartments</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Floorplans</th>
+        </tr>
+        </thead>
+        <tbody id="apartment-list">
+        <tr th:each="apartment : ${apartments}">
+            <td th:text="${apartment.name}"></td>
+            <td>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Price</th>
+                        <th>Bedrooms</th>
+                        <th>Bathrooms</th>
+                        <th>Square Feet</th>
+                        <th>Date Available</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="floorplan : ${apartment.floorplans}">
+                        <td th:text="${floorplan.price}"></td>
+                        <td th:text="${floorplan.bedrooms}"></td>
+                        <td th:text="${floorplan.bathrooms}"></td>
+                        <td th:text="${floorplan.squareFeet}"></td>
+                        <td th:text="${floorplan.dateAvailable}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
