@@ -44,10 +44,7 @@ public class ApartmentsComScraperService {
 
     private String url;
 
-    //regex for splitting address
-    private final String regex = "^(.*?),\\s*(.*?),\\s*([A-Z]{2})\\s*(\\d{5})$";
 
-    Pattern pattern = Pattern.compile(regex);
 
 
     /**
@@ -60,22 +57,14 @@ public class ApartmentsComScraperService {
         //data for apartment
         String propertyName = driver.findElement(By.id("propertyName")).getText();
 
-        String address = driver.findElement(By.className("propertyAddressContainer")).getText();
+        WebElement addressContainer = driver.findElement(By.className("propertyAddressContainer"));
+        String streetAddress = addressContainer.findElement(By.className("delivery-address")).getText().replace(",", "");
+        WebElement cityElement = addressContainer.findElement(By.xpath(".//h2/span[not(@class)]"));
+        String city = cityElement.getText();
+        WebElement stateAndZip = addressContainer.findElement(By.className("stateZipContainer"));
+        String state = stateAndZip.findElements(By.tagName("span")).get(0).getText();
+        String zipCode = stateAndZip.findElements(By.tagName("span")).get(1).getText();
 
-        Matcher matcher = pattern.matcher(address);
-
-        String streetAddress;
-        String city;
-        String state;
-        String zipCode;
-        if(matcher.matches()){
-            streetAddress = matcher.group(1);
-            city = matcher.group(2);
-            state = matcher.group(3);
-            zipCode = matcher.group(4);
-        } else {
-          throw new RuntimeException("Error parsing address");
-        }
 
         List<WebElement> plans = driver.findElements(By.className("pricingGridItem"));
         List<Floorplan> floorplans = new ArrayList<>();

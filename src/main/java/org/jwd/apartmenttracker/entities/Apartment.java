@@ -19,10 +19,7 @@ public class Apartment {
     private String streetAddress;
    @Column(nullable=false)
     private String city;
-
-
-
-       @Column
+   @Column
     private String state;
    @Column(nullable=false)
     private int zipCode;
