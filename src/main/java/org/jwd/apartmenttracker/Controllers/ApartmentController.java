@@ -27,8 +27,12 @@ public class ApartmentController {
 
     @PostMapping("/track")
     public String trackApartment(String url) {
-        Apartment apartment = scraperService.scrapeListing(url);
-        apartmentRepository.save(apartment);
+        try {
+            Apartment apartment = scraperService.scrapeListing(url);
+            apartmentRepository.save(apartment);
+        }catch(Exception e){
+            System.out.println("Apartment already tracked or invalid URL");
+        }
         return "redirect:/";
     }
 

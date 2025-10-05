@@ -26,7 +26,9 @@
         </thead>
         <tbody id="apartment-list">
         <tr th:each="apartment : ${apartments}">
-            <td th:text="${apartment.name}"></td>
+            <td>
+                <a class="text-decoration-none text-black link-underline-opacity-25-hover" th:href="${apartment.url}" target="_blank" th:utext="${'<b>' + apartment.name + '</b>' + '<br>' + apartment.streetAddress + '<br>' + apartment.city + ', ' + apartment.state + '<br>' + apartment.zipCode}"></a>
+            </td>
             <td>
                 <table class="table">
                     <thead>

@@ -75,6 +75,8 @@ public class ApartmentsComScraperService {
         for(WebElement plan : plans){
             Floorplan fp = new Floorplan();
             //name and rent
+            if(plan.findElement(By.className("modelName")).getText().equals(""))
+                continue; //skip empty floorplans
             fp.setName(plan.findElement(By.className("modelName")).getText());
             fp.setPriceRange(plan.findElement(By.className("rentLabel")).getText());
 
