@@ -67,4 +67,10 @@ public class ApartmentController {
         }
         return "redirect:/";
     }
+
+    @DeleteMapping("/delete/{id}")
+    public String DeleteApartment(@PathVariable Long id) {
+        apartmentRepository.deleteById(id);
+        return "redirect:/";
+    }
 }

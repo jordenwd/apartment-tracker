@@ -37,7 +37,7 @@
         </tr>
         </thead>
         <tbody id="apartment-list">
-        <tr th:each="apartment : ${apartments}">
+        <tr th:each="apartment : ${apartments}" th:attr="data-id=${apartment.id}">
             <td class="name-column">
                 <a class="text-decoration-none text-black link-underline-opacity-25-hover" th:href="${apartment.url}" target="_blank" th:utext="${'<b>' + apartment.name + '</b>' + '<br>' + apartment.streetAddress + '<br>' + apartment.city + ', ' + apartment.state + '<br>' + apartment.zipCode}"></a>
             </td>
@@ -65,20 +65,12 @@
                         </tbody>
                     </table>
                 </div>
+                <button class = "btn btn-danger">Delete</button>
             </td>
         </tr>
         </tbody>
     </table>
 </div>
-<script>
-    // Call the update when the button is clicked
-    document.getElementById('update-all-btn').addEventListener('click', () => {
-        fetch('/update', {
-            method: 'PATCH'
-        }).then(() => {
-            window.location.reload();
-        });
-    });
-</script>
+<script src="/js/httpMethods.js"></script>
 </body>
 </html>
