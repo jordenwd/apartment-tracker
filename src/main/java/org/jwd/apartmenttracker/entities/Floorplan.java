@@ -1,20 +1,23 @@
 package org.jwd.apartmenttracker.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 @Entity
 public class Floorplan {
    @Id
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
 
-
+    @Column
     private String name;
+    @Column
     private String bed;
+    @Column
     private String bath;
+    @Column
     private String squareFeet;
+    @Column
     private String priceRange;
 
 

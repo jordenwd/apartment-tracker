@@ -44,10 +44,7 @@ public class ApartmentsComScraperService {
 
     private String url;
 
-    //regex for splitting address
-    private final String regex = "^(.*?),\\s*(.*?),\\s*([A-Z]{2})\\s*(\\d{5})$";
 
-    Pattern pattern = Pattern.compile(regex);
 
 
     /**
@@ -60,22 +57,17 @@ public class ApartmentsComScraperService {
         //data for apartment
         String propertyName = driver.findElement(By.id("propertyName")).getText();
 
-        String address = driver.findElement(By.className("propertyAddressContainer")).getText();
+        //find the different address elements
+        WebElement addressContainer = driver.findElement(By.className("propertyAddressContainer"));
+        String streetAddress = addressContainer.findElement(By.className("delivery-address")).getText().replace(",", "");
+        WebElement cityElement = addressContainer.findElement(By.xpath(".//h2/span[not(@class)]"));
+        String city = cityElement.getText();
+        WebElement stateAndZip = addressContainer.findElement(By.className("stateZipContainer"));
+        String state = stateAndZip.findElements(By.tagName("span")).get(0).getText();
+        String zipCode = stateAndZip.findElements(By.tagName("span")).get(1).getText();
 
-        Matcher matcher = pattern.matcher(address);
 
-        String streetAddress;
-        String city;
-        String state;
-        String zipCode;
-        if(matcher.matches()){
-            streetAddress = matcher.group(1);
-            city = matcher.group(2);
-            state = matcher.group(3);
-            zipCode = matcher.group(4);
-        } else {
-          throw new RuntimeException("Error parsing address");
-        }
+        Apartment apartment = new Apartment(propertyName, streetAddress, city, state, Integer.parseInt(zipCode), url);
 
         List<WebElement> plans = driver.findElements(By.className("pricingGridItem"));
         List<Floorplan> floorplans = new ArrayList<>();
@@ -83,6 +75,8 @@ public class ApartmentsComScraperService {
         for(WebElement plan : plans){
             Floorplan fp = new Floorplan();
             //name and rent
+            if(plan.findElement(By.className("modelName")).getText().equals(""))
+                continue; //skip empty floorplans
             fp.setName(plan.findElement(By.className("modelName")).getText());
             fp.setPriceRange(plan.findElement(By.className("rentLabel")).getText());
 
@@ -91,12 +85,11 @@ public class ApartmentsComScraperService {
             fp.setBed(bbs.get(0).getText());
             fp.setBath(bbs.get(1).getText());
             fp.setSquareFeet(bbs.get(2).getText());
+            fp.setApartment(apartment);
             floorplans.add(fp);
         }
-
-
-        String contactPhone = driver.findElement(By.className("propertyPhone")).getText();
-        return new Apartment(propertyName, streetAddress, city, state, Integer.parseInt(zipCode), floorplans);
+        apartment.setFloorplans(floorplans);
+        return apartment;
     }
 
     // Setter for WebDriver to allow injection of mock or alternative drivers for testing
