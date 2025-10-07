@@ -6,9 +6,9 @@ import org.jwd.apartmenttracker.scraper.ApartmentsComScraperService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/")
@@ -36,4 +36,35 @@ public class ApartmentController {
         return "redirect:/";
     }
 
+    @PatchMapping("/update")
+    public String updateApartments() {
+        List<Apartment> apartments = apartmentRepository.findAll();
+        for (Apartment apartment : apartments) {
+        boolean changed = false;
+            try {
+                Apartment updatedApartment = scraperService.scrapeListing((apartment.getUrl()));
+                //if apartment name changes, update
+                if(!updatedApartment.getName().equals(apartment.getName())) {
+                    apartment.setName(updatedApartment.getName());
+                    changed = true;
+                }
+                //if floorplans change, update
+                if(!updatedApartment.getFloorplans().equals(apartment.getFloorplans())) {
+                    apartment.getFloorplans().clear();
+                    apartment.getFloorplans().addAll(updatedApartment.getFloorplans());
+                    for(var floorplan : apartment.getFloorplans()) {
+                        floorplan.setApartment(apartment);
+                    }
+                    changed = true;
+                }
+
+                if(changed){
+                    apartmentRepository.save(apartment);
+                }
+            } catch (Exception e) {
+                System.out.println("Failed to update apartment: " + apartment.getUrl());
+            }
+        }
+        return "redirect:/";
+    }
 }

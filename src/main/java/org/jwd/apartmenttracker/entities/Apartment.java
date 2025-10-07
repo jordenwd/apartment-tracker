@@ -27,7 +27,7 @@ public class Apartment {
    @Column(nullable=false, unique=true)
     private String url;
 
-   @OneToMany(mappedBy = "apartment", cascade = CascadeType.ALL)
+   @OneToMany(mappedBy = "apartment", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Floorplan> floorplans;
 
     public Apartment() {
@@ -45,6 +45,10 @@ public class Apartment {
 
 
     //getters and setters
+    public long getId() {
+        return id;
+    }
+
     public String getName() {
         return name;
     }
