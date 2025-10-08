@@ -73,4 +73,6 @@ public class ApartmentController {
         apartmentRepository.deleteById(id);
         return "redirect:/";
     }
+
+
 }

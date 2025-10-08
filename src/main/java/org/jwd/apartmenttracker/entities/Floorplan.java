@@ -21,8 +21,52 @@ public class Floorplan {
     private String priceRange;
 
 
+
    @ManyToOne
     private Apartment apartment;
+
+
+    public int getMinPrice() {
+        if (priceRange == null || priceRange.isEmpty()) {
+            return 0;
+        }
+        priceRange = priceRange.replace("$", "").replace(",", "").trim();
+        if (priceRange.contains("-")) {
+            String[] parts = priceRange.split("-");
+            try {
+                return Integer.parseInt(parts[0].trim());
+            } catch (NumberFormatException e) {
+                return 0;
+            }
+        } else {
+            try {
+                return Integer.parseInt(priceRange.trim());
+            } catch (NumberFormatException e) {
+                return 0;
+            }
+        }
+    }
+
+    public int getMaxPrice() {
+        if (priceRange == null || priceRange.isEmpty()) {
+            return 0;
+        }
+        priceRange = priceRange.replace("$", "").replace(",", "").trim();
+        if (priceRange.contains("-")) {
+            String[] parts = priceRange.split("-");
+            try {
+                return Integer.parseInt(parts[1].trim());
+            } catch (NumberFormatException e) {
+                return 0;
+            }
+        } else {
+            try {
+                return Integer.parseInt(priceRange.trim());
+            } catch (NumberFormatException e) {
+                return 0;
+            }
+        }
+    }
 
     //getters and setters
     public Long getId() {
@@ -77,4 +121,5 @@ public class Floorplan {
     public void setApartment(Apartment apartment) {
         this.apartment = apartment;
     }
+
 }
