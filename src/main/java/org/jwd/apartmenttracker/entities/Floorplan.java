@@ -2,6 +2,10 @@ package org.jwd.apartmenttracker.entities;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Entity
 public class Floorplan {
    @Id
@@ -21,8 +25,62 @@ public class Floorplan {
     private String priceRange;
 
 
+
    @ManyToOne
     private Apartment apartment;
+
+
+    /**
+     * Get the minimum price from the priceRange string.
+     * @return the minimum price, or 0 if no valid price is found.
+     */
+    public int getMinPrice() {
+        if (priceRange == null || priceRange.isEmpty()) {
+            return 0;
+        }
+        var priceRangeTemp = priceRange.replace("$", "").replace(",", "");
+        String[] numbers = priceRangeTemp.split("[^0-9]+");
+        int minPrice = Integer.MAX_VALUE;
+        for (String number : numbers) {
+            if (!number.isEmpty()) {
+                try {
+                    int price = Integer.parseInt(number);
+                    if (price < minPrice) {
+                        minPrice = price;
+                    }
+                } catch (NumberFormatException e) {
+                    // ignore if number is not valid
+                }
+            }
+        }
+        return minPrice == Integer.MAX_VALUE ? 0 : minPrice;
+    }
+
+    /**
+     * Get the maximum price from the priceRange string.
+     * @return the maximum price, or 0 if no valid price is found.
+     */
+    public int getMaxPrice() {
+        if (priceRange == null || priceRange.isEmpty()) {
+            return 0;
+        }
+        var priceRangeTemp = priceRange.replace("$", "").replace(",", "");
+        String[] numbers = priceRangeTemp.split("[^0-9]+");
+        int maxPrice = 0;
+        for (String number : numbers) {
+            if (!number.isEmpty()) {
+                try {
+                    int price = Integer.parseInt(number);
+                    if (price > maxPrice) {
+                        maxPrice = price;
+                    }
+                } catch (NumberFormatException e) {
+                    // ignore if number is not valid
+                }
+            }
+        }
+        return maxPrice;
+    }
 
     //getters and setters
     public Long getId() {
@@ -77,4 +135,5 @@ public class Floorplan {
     public void setApartment(Apartment apartment) {
         this.apartment = apartment;
     }
+
 }
