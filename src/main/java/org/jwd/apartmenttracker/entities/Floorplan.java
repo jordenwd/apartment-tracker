@@ -2,6 +2,10 @@ package org.jwd.apartmenttracker.entities;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Entity
 public class Floorplan {
    @Id
@@ -30,42 +34,44 @@ public class Floorplan {
         if (priceRange == null || priceRange.isEmpty()) {
             return 0;
         }
-        priceRange = priceRange.replace("$", "").replace(",", "").trim();
-        if (priceRange.contains("-")) {
-            String[] parts = priceRange.split("-");
-            try {
-                return Integer.parseInt(parts[0].trim());
-            } catch (NumberFormatException e) {
-                return 0;
-            }
-        } else {
-            try {
-                return Integer.parseInt(priceRange.trim());
-            } catch (NumberFormatException e) {
-                return 0;
+        var priceRangeTemp = priceRange.replace("$", "").replace(",", "");
+        String[] numbers = priceRangeTemp.split("[^0-9]+");
+        int minPrice = Integer.MAX_VALUE;
+        for (String number : numbers) {
+            if (!number.isEmpty()) {
+                try {
+                    int price = Integer.parseInt(number);
+                    if (price < minPrice) {
+                        minPrice = price;
+                    }
+                } catch (NumberFormatException e) {
+                    // ignore if number is not valid
+                }
             }
         }
+        return minPrice == Integer.MAX_VALUE ? 0 : minPrice;
     }
 
     public int getMaxPrice() {
         if (priceRange == null || priceRange.isEmpty()) {
             return 0;
         }
-        priceRange = priceRange.replace("$", "").replace(",", "").trim();
-        if (priceRange.contains("-")) {
-            String[] parts = priceRange.split("-");
-            try {
-                return Integer.parseInt(parts[1].trim());
-            } catch (NumberFormatException e) {
-                return 0;
-            }
-        } else {
-            try {
-                return Integer.parseInt(priceRange.trim());
-            } catch (NumberFormatException e) {
-                return 0;
+        var priceRangeTemp = priceRange.replace("$", "").replace(",", "");
+        String[] numbers = priceRangeTemp.split("[^0-9]+");
+        int maxPrice = 0;
+        for (String number : numbers) {
+            if (!number.isEmpty()) {
+                try {
+                    int price = Integer.parseInt(number);
+                    if (price > maxPrice) {
+                        maxPrice = price;
+                    }
+                } catch (NumberFormatException e) {
+                    // ignore if number is not valid
+                }
             }
         }
+        return maxPrice;
     }
 
     //getters and setters
