@@ -13,10 +13,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag jordenwd/apartment-tracker:$(date +%s)
-    - name: Push image to Docker Hub
-      run: |
-        docker login -u jordenwd -p ${{ secrets.DOCKER_HUB_PASSWORD }}
-        docker push jordenwd/apartment-tracker:$(date +%s)
+      - uses: actions/checkout@v4
+      - name: Set image tag
+        id: vars
+        run: echo "tag=$(date +%s)" >> $GITHUB_OUTPUT
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag jordenwd/apartment-tracker:${{ steps.vars.outputs.tag }}
+      - name: Push image to Docker Hub
+        run: |
+          docker login -u jordenwd -p ${{ secrets.DOCKER_HUB_PASSWORD }}
+          docker push jordenwd/apartment-tracker:${{ steps.vars.outputs.tag }}
