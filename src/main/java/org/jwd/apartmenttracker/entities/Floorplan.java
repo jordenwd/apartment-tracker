@@ -30,6 +30,10 @@ public class Floorplan {
     private Apartment apartment;
 
 
+    /**
+     * Get the minimum price from the priceRange string.
+     * @return the minimum price, or 0 if no valid price is found.
+     */
     public int getMinPrice() {
         if (priceRange == null || priceRange.isEmpty()) {
             return 0;
@@ -52,6 +56,10 @@ public class Floorplan {
         return minPrice == Integer.MAX_VALUE ? 0 : minPrice;
     }
 
+    /**
+     * Get the maximum price from the priceRange string.
+     * @return the maximum price, or 0 if no valid price is found.
+     */
     public int getMaxPrice() {
         if (priceRange == null || priceRange.isEmpty()) {
             return 0;
